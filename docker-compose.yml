@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: voc-agent-db
+    environment:
+      POSTGRES_DB: vocagent
+      POSTGRES_USER: vocagent
+      POSTGRES_PASSWORD: vocagent123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vocagent"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rag-service:
+    build: ./backend
+    container_name: voc-agent-rag
+    environment:
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: voc-agent-frontend
+    environment:
+      DATABASE_URL: postgresql://vocagent:vocagent123@postgres:5432/vocagent
+      RAG_SERVICE_URL: http://rag-service:8000
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-key}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rag-service:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
