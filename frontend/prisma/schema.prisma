@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+
+  vocs      VOC[]
+  guides    Guide[]
+  approvals Approval[]
+
+  @@map("users")
+}
+
+model VOC {
+  id          String   @id @default(cuid())
+  jiraKey     String   @unique
+  title       String
+  description String
+  category    String
+  status      String   @default("NEW")
+  priority    String
+  reporter    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  guides      Guide[]
+
+  @@index([status])
+  @@index([category])
+  @@index([userId])
+  @@map("vocs")
+}
+
+model Guide {
+  id          String   @id @default(cuid())
+  vocId       String
+  voc         VOC      @relation(fields: [vocId], references: [id], onDelete: Cascade)
+
+  title       String
+  problem     String
+  cause       String
+  procedure   String
+  solution    String
+  sources     String
+
+  status      String   @default("DRAFT")
+
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  approvals   Approval[]
+
+  @@index([vocId])
+  @@index([authorId])
+  @@index([status])
+  @@map("guides")
+}
+
+model Approval {
+  id          String   @id @default(cuid())
+  guideId     String
+  guide       Guide    @relation(fields: [guideId], references: [id], onDelete: Cascade)
+
+  approverId  String
+  approver    User     @relation(fields: [approverId], references: [id])
+
+  status      String   @default("PENDING")
+  comment     String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([guideId])
+  @@index([approverId])
+  @@index([status])
+  @@map("approvals")
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  source      String
+  url         String?
+  category    String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([source])
+  @@index([category])
+  @@map("documents")
+}
