@@ -8,6 +8,7 @@ export const VOC_PRIORITY_LABELS = {
   LOW: 'Low',
   MEDIUM: 'Medium',
   HIGH: 'High',
+  URGENT: 'Urgent',
 } as const
 
 export const GUIDE_STATUS_LABELS = {

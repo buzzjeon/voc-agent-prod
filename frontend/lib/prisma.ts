@@ -1,3 +1,4 @@
+// @ts-expect-error prisma generate must be run before use
 import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as {

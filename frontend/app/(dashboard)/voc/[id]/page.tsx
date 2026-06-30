@@ -15,11 +15,11 @@ import type { VOC } from '@/lib/types'
 
 function getPriorityVariant(priority: string) {
   switch (priority) {
-    case 'urgent':
+    case 'URGENT':
       return 'danger'
-    case 'high':
+    case 'HIGH':
       return 'warning'
-    case 'medium':
+    case 'MEDIUM':
       return 'info'
     default:
       return 'default'
@@ -28,11 +28,9 @@ function getPriorityVariant(priority: string) {
 
 function getStatusVariant(status: string) {
   switch (status) {
-    case 'resolved':
+    case 'RESOLVED':
       return 'success'
-    case 'guide_generated':
-      return 'info'
-    case 'analyzing':
+    case 'IN_PROGRESS':
       return 'warning'
     default:
       return 'default'
@@ -211,7 +209,7 @@ export default function VOCDetailPage() {
                       <div className="font-medium text-sm mb-1 line-clamp-2">
                         {guide.title}
                       </div>
-                      <Badge variant={guide.status === 'approved' ? 'success' : 'warning'}>
+                      <Badge variant={guide.status === 'APPROVED' ? 'success' : 'warning'}>
                         {guide.status.replace('_', ' ').toUpperCase()}
                       </Badge>
                     </Link>
