@@ -14,12 +14,12 @@ import type { Guide } from '@/lib/types'
 
 function getStatusVariant(status: string) {
   switch (status) {
-    case 'approved':
+    case 'APPROVED':
       return 'success'
-    case 'pending_approval':
+    case 'PENDING_APPROVAL':
       return 'warning'
-    case 'rejected':
-      return 'danger'
+    case 'PUBLISHED':
+      return 'info'
     default:
       return 'default'
   }
@@ -54,7 +54,7 @@ export default function GuideDetailPage() {
 
   const handleApprove = async (feedback?: string) => {
     try {
-      await approveGuide({ guideId: id, approved: true, feedback })
+      await approveGuide(id, true, feedback)
       alert('Guide approved successfully!')
       router.push('/guides')
     } catch (error) {
@@ -65,7 +65,7 @@ export default function GuideDetailPage() {
 
   const handleReject = async (feedback: string) => {
     try {
-      await approveGuide({ guideId: id, approved: false, feedback })
+      await approveGuide(id, false, feedback)
       alert('Guide rejected.')
       router.push('/guides')
     } catch (error) {
@@ -130,7 +130,7 @@ export default function GuideDetailPage() {
         </div>
 
         <div className="space-y-6">
-          {guide.status === 'pending_approval' && (
+          {guide.status === 'PENDING_APPROVAL' && (
             <ApprovalWorkflow
               guide={guide}
               onApprove={handleApprove}
@@ -138,7 +138,7 @@ export default function GuideDetailPage() {
             />
           )}
 
-          {(guide.status === 'approved' || guide.status === 'rejected') && (
+          {(guide.status === 'APPROVED' || guide.status === 'PUBLISHED') && (
             <Card>
               <CardHeader>
                 <h2 className="text-xl font-semibold">Status</h2>

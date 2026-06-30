@@ -4,8 +4,8 @@ export interface VOC {
   title: string
   description: string
   category: string
-  status: 'new' | 'analyzing' | 'guide_generated' | 'resolved'
-  priority: 'low' | 'medium' | 'high' | 'urgent'
+  status: 'NEW' | 'IN_PROGRESS' | 'RESOLVED'
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
   createdAt: string
   updatedAt: string
 }
@@ -19,7 +19,7 @@ export interface Guide {
   procedure: string
   solution: string
   sources: string
-  status: 'draft' | 'pending_approval' | 'approved' | 'rejected'
+  status: 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED' | 'PUBLISHED'
   createdAt: string
   updatedAt: string
   approvedBy?: string

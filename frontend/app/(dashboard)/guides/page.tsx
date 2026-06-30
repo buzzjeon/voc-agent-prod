@@ -12,12 +12,12 @@ import type { Guide } from '@/lib/types'
 
 function getStatusVariant(status: string) {
   switch (status) {
-    case 'approved':
+    case 'APPROVED':
       return 'success'
-    case 'pending_approval':
+    case 'PENDING_APPROVAL':
       return 'warning'
-    case 'rejected':
-      return 'danger'
+    case 'PUBLISHED':
+      return 'info'
     default:
       return 'default'
   }
